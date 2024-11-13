@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  catalog:
+    build: ./catalog
+    ports:
+      - "3001:3000"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/shopEaseDB
+
+  orders:
+    build: ./orders
+    ports:
+      - "3002:3000"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/shopEaseDB
+
+  payments:
+    build: ./payments
+    ports:
+      - "3003:3000"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/shopEaseDB
+
+  user-auth:
+    build: ./user-auth
+    ports:
+      - "3004:3000"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/shopEaseDB
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+
+volumes:
+  mongo_data:
+    driver: local
